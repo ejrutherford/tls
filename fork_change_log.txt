@@ -1,0 +1,30 @@
+14/07/2025: main.py
+  t_span reduced when not using consecutive TESS sectors.
+  Useful when searching data from two sectors that are well separated in time, as number of periods in the period grid are reduced.
+  Subtracts maximum difference from t_span
+
+29/07:2025: grid.py
+  Added parameter <use_roche_limit> (bool) to period_grid()
+  When performing injection-recovery tests, synthetic signals with non-physical orbital periods may be injected.
+  Roche limit to be ignored in this case.
+  If use_roche_limit == False:
+    Ignore roche limit when deciding minimum period (maximum frequency). 
+    Minimum frequency currently set to 0.4 days (f_max = 2.8935 * 10**-5
+29/07/2025: tls_constants.py
+  Added parameter "use_roche_limit" to VALID_PARAMETERS in support of above change.
+
+29/07/2025: main.py
+  Removal of majority of code after line 190 (transitleastsquares.power())
+  This code generally related to the calculation of statistics for the best fit transit.
+  For injection-recovery tests, these statistics are not necessary. Instead, obtaining basic information about several periodic signals from the power spectrum is required.
+  Now identifies up to 10 peaks in the power spectrum using scipy.signal.argrelextrema
+    For each peak, only the phasing (T0), transit times, transit duration and transit model are calculated
+  transitleastsquares.power() now returns:
+    test_statistic_periods,  
+    power,
+    results_list # (period, power, T0, duration, depth, model_time, model_flux) for each selected peak in the power spectrum.
+  
+29/09/2025: main.py
+  Adjusted t_span calculation when not using consecutive TESS sectors.
+  Now subtracts all t_differences > 5.0 days from t_span
+  Extension of previous change to the case where more than two TESS sectors are used.
