@@ -64,6 +64,7 @@ def period_grid(
     period_max=float("inf"),
     oversampling_factor=tls_constants.OVERSAMPLING_FACTOR,
     n_transits_min=tls_constants.N_TRANSITS_MIN,
+    use_roche_limit=True,
 ):
     """Returns array of optimal sampling periods for transit search in light curves
        Following Ofir (2014, A&A, 561, A138)"""
@@ -110,7 +111,14 @@ def period_grid(
 
     # boundary conditions
     f_min = n_transits_min / time_span
-    f_max = 1.0 / (2 * pi) * sqrt(tls_constants.G * M_star / (3 * R_star) ** 3)
+    # For injection recovery tests, the Roche limit isn't factored into the
+    # injected periods, so use this to set the minimum period searched for to
+    # approximately 0.4 days
+    # minimum period in the injection grid = 0.5 days
+    if use_roche_limit:
+        f_max = 1.0 / (2 * pi) * sqrt(tls_constants.G * M_star / (3 * R_star) ** 3)
+    else:
+        f_max = 2.8935 * 10**-5 # equivalent to 0.4 days; adjust parameter to supply this directly later
 
     # optimal frequency sampling, Equations (5), (6), (7)
     A = (
