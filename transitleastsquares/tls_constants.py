@@ -144,5 +144,6 @@ VALID_PARAMETERS = [
     "use_threads",
     "show_progress_bar",
     "transit_template",
-    "verbose"
+    "verbose",
+    "use_roche_limit"
 ]
