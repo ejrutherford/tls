@@ -62,14 +62,21 @@ class transitleastsquares:
         )
 
     def _grids(self):
+        gaps = numpy.where(
+            numpy.diff(self.t) > 5.0, 
+            gaps, 
+            0
+            )
+
         periods = period_grid(
             R_star=self.R_star,
             M_star=self.M_star,
-            time_span=numpy.max(self.t) - numpy.min(self.t),
+            time_span=numpy.max(self.t) - numpy.min(self.t) - numpy.sum(gaps),
             period_min=self.period_min,
             period_max=self.period_max,
             oversampling_factor=self.oversampling_factor,
             n_transits_min=self.n_transits_min,
+            use_roche_limit=self.use_roche_limit,
         )
         durations = duration_grid(
             periods,
