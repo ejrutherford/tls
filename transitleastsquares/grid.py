@@ -146,6 +146,7 @@ def period_grid(
     oversampling_factor=tls_constants.OVERSAMPLING_FACTOR,
     n_transits_min=tls_constants.N_TRANSITS_MIN,
     _is_fallback=False,
+    use_roche_limit=True
 ):
     """Returns array of optimal sampling periods for transit search in light curves
     Following Ofir (2014, A&A, 561, A138)"""
@@ -159,7 +160,10 @@ def period_grid(
 
     # boundary conditions
     f_min = n_transits_min / time_span
-    f_max = 1.0 / (2 * pi) * sqrt(tls_constants.G * M_star / (3 * R_star) ** 3)
+    if use_roche_limit:
+        f_max = 1.0 / (2 * pi) * sqrt(tls_constants.G * M_star / (3 * R_star) ** 3)
+    else:
+        f_max = 2.8935 * 10**-5 # equivalent to 0.4 days
 
     # optimal frequency sampling, Equations (5), (6), (7)
     A = (
