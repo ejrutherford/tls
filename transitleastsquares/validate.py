@@ -83,6 +83,7 @@ def validate_args(self, kwargs):
     self.duration_grid_step = kwargs.get(
         "duration_grid_step", tls_constants.DURATION_GRID_STEP
     )
+    self.use_roche_limit = kwargs.get("use_roche_limit", True)
 
     self.use_threads = kwargs.get("use_threads", multiprocessing.cpu_count())
     self.backend = kwargs.get("backend", None)
