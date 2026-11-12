@@ -219,6 +219,7 @@ VALID_PARAMETERS = [
     "transit_template",
     "verbose",
     "backend",
+    "use_roche_limit"
 ]
 
 # Worker processes (use_threads > 1) are kept alive between power() calls and
