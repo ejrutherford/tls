@@ -188,6 +188,18 @@ DEFAULT_BACKEND = "fused-pl"
 BIN_FRACTION = 0.03
 BIN_FACTOR_MAX = 64
 
+# Number of signals to return detection statistics for
+N_SIGNALS = 1
+
+# Whether or not to compute model light curves and statistics for detected periods
+COMPUTE_MODELS_STATS = True
+
+#  Whether or not to use the Roche limit when computing the minimum period searched for a given star
+USE_ROCHE_LIMIT
+
+# SDE value used as a cutoff when selected periodogram peaks
+SDE_LOWER_LIMIT = 5
+
 # Warn the user if unknown **kwargs are given as parameters
 VALID_PARAMETERS = [
     "R_star",
@@ -219,7 +231,10 @@ VALID_PARAMETERS = [
     "transit_template",
     "verbose",
     "backend",
-    "use_roche_limit"
+    "use_roche_limit",
+    "n_signals",
+    "compute_models_stats",
+    "sde_lower_limit"
 ]
 
 # Worker processes (use_threads > 1) are kept alive between power() calls and
