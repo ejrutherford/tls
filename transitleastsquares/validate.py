@@ -142,6 +142,15 @@ def validate_args(self, kwargs):
 
     # Validations to avoid (garbage in ==> garbage out)
 
+    if not isinstance(self.use_roche_limit, bool):
+        raise TypeError("use_roche_limit should be boolean")
+
+    if not isinstance(self.sde_lower_limit, [int, float]):
+        raise TypeError("sde_lower_limit must be int or float")
+
+    if not isinstance(self.compute_models_stats, bool):
+        raise TypeError("compute_models_stats should be boolean")
+
     # If n_signals is given, ensure valid type and value
     if not isinstance(self.n_signals, int) or not 1 <= self.n_signals <= 10:
         raise ValueError("Expected integer in range(1, 10)")
