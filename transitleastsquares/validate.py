@@ -83,7 +83,10 @@ def validate_args(self, kwargs):
     self.duration_grid_step = kwargs.get(
         "duration_grid_step", tls_constants.DURATION_GRID_STEP
     )
-    self.use_roche_limit = kwargs.get("use_roche_limit", True)
+    self.use_roche_limit = kwargs.get("use_roche_limit", tls_constants.USE_ROCHE_LIMIT)
+    self.n_signals = kwargs.get(n_signals, tls_constants.N_SIGNALS)
+    self.compute_models_stats = kwargs.get("compute_models_stats", tls_constants.COMPUTE_MODELS_STATS)
+    self.sde_lower_limit = kwargs.get("sde_lower_limit", tls_constants.SDE_LOWER_LIMIT)
 
     self.use_threads = kwargs.get("use_threads", multiprocessing.cpu_count())
     self.backend = kwargs.get("backend", None)
@@ -138,6 +141,10 @@ def validate_args(self, kwargs):
         )
 
     # Validations to avoid (garbage in ==> garbage out)
+
+    # If n_signals is given, ensure valid type and value
+    if not isinstance(self.n_signals, int) or not 1 <= self.n_signals <= 10:
+        raise ValueError("Expected integer in range(1, 10)")
 
     # Stellar radius: 0 < R_star_min <= R_star <= R_star_max < inf
     _check_positive_finite("R_star", self.R_star)
