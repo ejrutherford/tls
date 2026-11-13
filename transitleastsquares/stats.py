@@ -6,6 +6,7 @@ from os import path
 import numba
 import numpy
 from tqdm import tqdm
+from scipy.signal import find_peaks
 
 from transitleastsquares import tls_constants
 from transitleastsquares.core import fold
@@ -167,10 +168,17 @@ def pink_noise(data, width):
     return _pink_noise(data, int(width))
 
 
-def period_uncertainty(periods, power):
+def find_periodogram_peaks(power, power_limit, n_peaks):
+    """Retrieve indices of up to n_peaks distinct periodogram peaks, highest first."""
+    power = numpy.asarray(power, dtype=float)
+    indices, props = find_peaks(power, prominence=min_prominence, height=power_limit)
+    indices = indices[numpy.argsort(p[indices])[::-1]]
+    return [int(i) for i in indices[:n_peaks]]
+
+def period_uncertainty(periods, power, index=None):
     """Half width at half maximum of the highest peak (inf if not bracketed)"""
     try:
-        index_highest_power = numpy.argmax(power)
+        index_highest_power = numpy.argmax(power) if index is None else index
         half = 0.5 * power[index_highest_power]
         # Upper limit
         idx = index_highest_power
