@@ -42,6 +42,7 @@ RESULT_KEYS = (
     "folded_dy",
     "folded_phase",
     "model_folded_model",
+    "signals",
 )
 
 
