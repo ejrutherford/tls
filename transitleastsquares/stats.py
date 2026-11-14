@@ -168,11 +168,11 @@ def pink_noise(data, width):
     return _pink_noise(data, int(width))
 
 
-def find_periodogram_peaks(power, power_limit, n_peaks):
+def find_periodogram_peaks(power, power_limit, min_prominence, n_peaks):
     """Retrieve indices of up to n_peaks distinct periodogram peaks, highest first."""
     power = numpy.asarray(power, dtype=float)
     indices, props = find_peaks(power, prominence=min_prominence, height=power_limit)
-    indices = indices[numpy.argsort(p[indices])[::-1]]
+    indices = indices[numpy.argsort(power[indices])[::-1]]
     return [int(i) for i in indices[:n_peaks]]
 
 def period_uncertainty(periods, power, index=None):
