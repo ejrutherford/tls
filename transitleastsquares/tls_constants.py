@@ -195,10 +195,13 @@ N_SIGNALS = 1
 COMPUTE_MODELS_STATS = True
 
 #  Whether or not to use the Roche limit when computing the minimum period searched for a given star
-USE_ROCHE_LIMIT
+USE_ROCHE_LIMIT = True
 
 # SDE value used as a cutoff when selected periodogram peaks
-SDE_LOWER_LIMIT = 5
+SDE_LOWER_LIMIT = 2.0
+
+# Minimum significance of found peaks in the periodogram
+MIN_PROMINENCE = 1.0
 
 # Warn the user if unknown **kwargs are given as parameters
 VALID_PARAMETERS = [
@@ -234,7 +237,8 @@ VALID_PARAMETERS = [
     "use_roche_limit",
     "n_signals",
     "compute_models_stats",
-    "sde_lower_limit"
+    "sde_lower_limit",
+    "min_prominence"
 ]
 
 # Worker processes (use_threads > 1) are kept alive between power() calls and
