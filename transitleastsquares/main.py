@@ -273,16 +273,17 @@ class transitleastsquares:
         else:
             spectrum = self._compute_spectrum(found)
             signals = []
-            for rank, index in enumerate(find_periodogram_peaks(spectrum["power"], self.sde_lower_limit, self.n_signals)):
+            for rank, index in enumerate(find_periodogram_peaks(spectrum["power"], self.sde_lower_limit, self.min_prominence, self.n_signals)):
                 fit = self._fit_transit_signal(found, index, durations, lc_cache_overview,
                                     lc_arr, backend, primary=(rank == 0))
-                sde = spec["power"][index]   # power is scaled so its max == SDE: power[idx] is this peak's SDE
+                sde = spectrum["power"][index]
                 fit.update(
                     rank=rank,
+                    period=found.periods[index],
                     SDE=sde,
-                    SDE_raw=spec["power_raw"][idx],
+                    SDE_raw=spectrum["power_raw"][index],
                     FAP=FAP(sde),
-                    period_uncertainty=period_uncertainty(found.periods, spec["power"], index),
+                    period_uncertainty=period_uncertainty(found.periods, spectrum["power"], index),
                 )
                 signals.append(transitleastsquaresresults(**fit))
             r.update(spectrum)
@@ -306,7 +307,7 @@ class transitleastsquares:
             detrend=self.SDE_detrend, 
             periods=found.periods
             )
-    return dict(SR=SR, power_raw=power_raw, power=power, SDE_raw=SDE_raw, SDE=SDE)
+        return dict(SR=SR, power_raw=power_raw, power=power, SDE_raw=SDE_raw, SDE=SDE)
 
     def _fit_transit_signal(self, found, index, durations, lc_cache_overview, lc_arr, backend, primary):
         t, y, dy = self.t, self.y, self.dy
@@ -327,13 +328,12 @@ class transitleastsquares:
             show_progress_bar=self.show_progress_bar and primary,
             verbose=self.verbose,
         )
+        transit_times = all_transit_times(T0, t, period)
+        transit_duration_in_days = calculate_transit_duration_in_days(
+            t, period, transit_times, duration
+        )
         # Only compute the transit times, models, per-transit stats if this is passed
         if self.compute_models_stats:
-            transit_times = all_transit_times(T0, t, period)
-            transit_duration_in_days = calculate_transit_duration_in_days(
-                t, period, transit_times, duration
-            )
-
             # Phase-folded data, mid-transit at phase 0.5
             phases = fold(t, period, T0=T0 + period / 2)
             sort_index = numpy.argsort(phases)
@@ -421,7 +421,6 @@ class transitleastsquares:
                 )
 
             return dict(
-                v,
                 depth_mean=(depth_mean, depth_mean_std),
                 depth_mean_even=(depth_mean_even, depth_mean_even_std),
                 depth_mean_odd=(depth_mean_odd, depth_mean_odd_std),
