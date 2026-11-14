@@ -84,9 +84,10 @@ def validate_args(self, kwargs):
         "duration_grid_step", tls_constants.DURATION_GRID_STEP
     )
     self.use_roche_limit = kwargs.get("use_roche_limit", tls_constants.USE_ROCHE_LIMIT)
-    self.n_signals = kwargs.get(n_signals, tls_constants.N_SIGNALS)
+    self.n_signals = kwargs.get("n_signals", tls_constants.N_SIGNALS)
     self.compute_models_stats = kwargs.get("compute_models_stats", tls_constants.COMPUTE_MODELS_STATS)
     self.sde_lower_limit = kwargs.get("sde_lower_limit", tls_constants.SDE_LOWER_LIMIT)
+    self.min_prominence = kwargs.get("min_prominence", tls_constants.MIN_PROMINENCE)
 
     self.use_threads = kwargs.get("use_threads", multiprocessing.cpu_count())
     self.backend = kwargs.get("backend", None)
@@ -145,7 +146,7 @@ def validate_args(self, kwargs):
     if not isinstance(self.use_roche_limit, bool):
         raise TypeError("use_roche_limit should be boolean")
 
-    if not isinstance(self.sde_lower_limit, [int, float]):
+    if not isinstance(self.sde_lower_limit, (int, float)):
         raise TypeError("sde_lower_limit must be int or float")
 
     if not isinstance(self.compute_models_stats, bool):
