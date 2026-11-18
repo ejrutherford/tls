@@ -194,6 +194,9 @@ N_SIGNALS = 1
 # Whether or not to compute model light curves and statistics for detected periods
 COMPUTE_MODELS_STATS = True
 
+# Whether or not to reduce the period grid granularity if large gaps exist in the Data
+GAP_REDUCED_PERIOD_GRID = True
+
 #  Whether or not to use the Roche limit when computing the minimum period searched for a given star
 USE_ROCHE_LIMIT = True
 
@@ -238,7 +241,8 @@ VALID_PARAMETERS = [
     "n_signals",
     "compute_models_stats",
     "sde_lower_limit",
-    "min_prominence"
+    "min_prominence",
+    "gap_reduced_period_grid",
 ]
 
 # Worker processes (use_threads > 1) are kept alive between power() calls and

@@ -63,17 +63,22 @@ class transitleastsquares:
         )
 
     def _grids(self):
-        gaps = numpy.diff(self.t)
-        gaps = numpy.where(
-            gaps > 5.0, 
-            gaps, 
-            0
+        if self.gap_reduced_period_grid:
+            gaps = numpy.diff(self.t)
+            gaps = numpy.where(
+                gaps > 5.0, 
+                gaps, 
+                0
             )
+            gaps = numpy.sum(gaps)
+        else:
+            gaps=0.0
+
 
         periods = period_grid(
             R_star=self.R_star,
             M_star=self.M_star,
-            time_span=numpy.max(self.t) - numpy.min(self.t) - numpy.sum(gaps),
+            time_span=numpy.max(self.t) - numpy.min(self.t) - gaps,
             period_min=self.period_min,
             period_max=self.period_max,
             oversampling_factor=self.oversampling_factor,

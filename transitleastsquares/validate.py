@@ -83,6 +83,7 @@ def validate_args(self, kwargs):
     self.duration_grid_step = kwargs.get(
         "duration_grid_step", tls_constants.DURATION_GRID_STEP
     )
+    self.gap_reduced_period_grid = kwargs.get("gap_reduced_period_grid", tls_constants.GAP_REDUCED_PERIOD_GRID)
     self.use_roche_limit = kwargs.get("use_roche_limit", tls_constants.USE_ROCHE_LIMIT)
     self.n_signals = kwargs.get("n_signals", tls_constants.N_SIGNALS)
     self.compute_models_stats = kwargs.get("compute_models_stats", tls_constants.COMPUTE_MODELS_STATS)
@@ -145,6 +146,9 @@ def validate_args(self, kwargs):
 
     if not isinstance(self.use_roche_limit, bool):
         raise TypeError("use_roche_limit should be boolean")
+
+    if not isinstance(self.gap_reduced_period_grid, bool):
+        raise TypeError("gap_reduced_period_grid should be boolean")
 
     if not isinstance(self.sde_lower_limit, (int, float)):
         raise TypeError("sde_lower_limit must be int or float")
