@@ -427,6 +427,10 @@ class transitleastsquares:
                 )
 
             return dict(
+                period=period,
+                T0=T0,
+                duration=transit_duration_in_days,
+                depth=depth,
                 depth_mean=(depth_mean, depth_mean_std),
                 depth_mean_even=(depth_mean_even, depth_mean_even_std),
                 depth_mean_odd=(depth_mean_odd, depth_mean_odd_std),
