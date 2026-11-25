@@ -292,7 +292,8 @@ class transitleastsquares:
                 )
                 signals.append(transitleastsquaresresults(**fit))
             r.update(spectrum)
-            r.update({k: v for k, v in signals[0].items() if k != "rank"})
+            if signals:
+                r.update({k: v for k, v in signals[0].items() if k != "rank"})
             r["signals"] = signals
         
         # else:
